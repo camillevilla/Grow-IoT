@@ -7,7 +7,9 @@ Grow-IoT allows you to:
 * Securely connect and store data from sensors and actuators
 * *Beta*: Create interelationships and workflows between things
 
-If you think the Internet of Things should be based on open standards and interoperable by design (kind of like the web)... well, you've come to the right place. ; )
+If you think the Internet of Things should be based on open standards and interoperable by design (kind of like the web)... well, you've come to the right place. Let's make it easier for scientists of all ages to start collecting data from sensors.
+
+![Example image](https://cloud.githubusercontent.com/assets/521978/20240422/a50694ee-a8cc-11e6-97f5-81b636149b85.png)
 
 ## Installing Grow-IoT
 
@@ -32,98 +34,95 @@ bower install
 
 And that's it! Visit http://localhost:3000 with your browser of choice; you should now have the application running.
 
-Create a test thing (click the '+' button and then the one that says 'Create test thing'). You should see something like this:
+Create a test thing (click the '+' button and then the one that says 'Create test thing'). Start by playing with the `test-thing.html` in the `imports/things/` folder.
 
-![test-thing in Grow-IoT](https://cloud.githubusercontent.com/assets/521978/20084015/98061fc8-a514-11e6-8778-3de85abd98d5.png)
+## Adding components
 
-Start by playing with the `test-thing.html` in the `imports/things/` folder.
+Grow-IoT is [webcomponent](http://webcomponents.org/) based and modular. It's easy to create a new component, or add an existing one.
 
-## Making custom components
+To add a component:
 
-Grow-IoT is [webcomponent](http://webcomponents.org/) based and modular. It's easy to create a new component:
+1. Install it with [bower](https://bower.io/).
 
-```html
-<!--
-`test-thing`
-An example of how to build a thing for Grow-IoT
+2. Then add it to the `imports/ui/imports.html` file. 
 
-@demo demo/index.html 
--->
-<dom-module id="test-thing">
-  <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h2>[[message]]</h2>
-    <paper-button on-click="fireEvent">Fire event</paper-button>
-  </template>
+Now it's ready to use in Grow-IoT! For more information on creating custom elements see the [polymer project](https://www.polymer-project.org/1.0/).
 
-  <script>
-    Polymer({
-
-      is: 'test-thing',
-
-      properties: {
-        message: {
-          type: String,
-          value: 'Hello world',
-        }
-      },
-
-      fireEvent (e) {
-        this.fire("test-event",{
-          test: true
-        });
-        console.log('Fired event!');
-      }
-    });
-  </script>
-</dom-module>
-
-```
-
-For more information on creating custom elements see the [polymer project](https://www.polymer-project.org/1.0/) for extensive documentation.
-
-With regard to meteor integration see: https://github.com/meteorwebcomponents
-
-## Distributed Data Protocol
+## Connecting devices (or virtual things)
 
 You can interact with the Grow-IoT api using the Distributed Data Protocol. *There are DDP Clients available in many different programming languages*, see http://meteorpedia.com/read/DDP_Clients for a list.
 
-### Hardware examples
+[Grow.js](https://github.com/CommonGarden/Grow.js) is a helper library that makes it fairly easy to connect a thing to Grow-IoT. You can use it for both hardware or virtual things.
+
+```javascript
+var Thing = require('Grow.js');
+
+var light = new Thing({
+    uuid: 'PASTE_UUID_HERE',
+    token: 'PASTE_TOKEN_HERE',
+
+    // Properties can be updated by the API
+    properties: {
+        name: 'Software light',
+        state: 'off',
+        lightConditions: null,
+        light_data_interval: 3000
+    },
+
+    start: function () {
+        setInterval(grow.call('light_data'), 3000);
+    }
+
+    // Actions are the API of the thing.
+    turn_light_on: function () {
+        grow.set('state', 'on');
+    },
+
+    turn_light_off: function () {
+        // Emit a 'light off' event, set the state property to 'off'
+        grow.set('state', 'off');
+    },
+
+    light_data: function () {
+        // Send data to the Grow-IoT app.
+        grow.emit({
+          type: 'light',
+          value: 'sunny'
+        });
+    }
+});
+
+// Defaults to http://localhost:3000
+grow.connect();
+```
+
+See [Grow.js](https://github.com/CommonGarden/Grow.js) for more info.
+
+### Hardware Examples
+Will be documenting soon.
 * https://github.com/CommonGarden/dr-dose
 * https://github.com/CommonGarden/smart-pot
 
-See [Grow.js](https://github.com/CommonGarden/Grow.js) for more examples.
+### Software examples
+Grow-IoT supports all kinds of Things! Even models of ones you can't connect to the Internet, like a tree.
 
-## 'Cloud' setup
-### Setting up an instance on Meteor Galaxy
+Here are some suggestions of web components you could make. I'll get around to making some eventually...
+* Plants! Let's make a library of plants!
+* Models of growing environments
 
-You can easily host **your own** Grow-IoT instance on [Meteor Galaxy](https://galaxy.meteor.com/). See the Meteor Galaxy website for instructions on hosting a new meteor application.
-
-See [instructions in Grow.js for securely connecting devices to the instance](https://github.com/CommonGarden/grow.js).
 
 ## Contributing
-In a sentence, be kind to one another. All are welcome, please see the following:
+Be kind to one another. All are welcome. See the following for more info:
 
 * [Code of Conduct](https://github.com/CommonGarden/Organization/blob/master/code-of-conduct.md)
 * [Contributing Info](https://github.com/CommonGarden/Organization/blob/master/contributing.md)
 
-Since this project lies at the intersection of hardware, software, design, living things, etc... we've setup special Gitter (Slack sucks) channel rooms:
-
-* [Grow-IoT Developers chat](https://gitter.im/CommonGarden/Grow-IoT): *Let's build something useful and push the boundaries of our knowledge.*
-* [UX / UI designers chat](https://gitter.im/CommonGarden/UX):  *Making things usable for people who don't know shit about Javascript is what we **need** to do.*
-* [Hardware makers](https://gitter.im/CommonGarden/Makers): *How can we make your job easier?*
-* [Growers chat](https://gitter.im/CommonGarden/Growers): *How can we make your job easier?*
-
-#### Code Style
+### Code Style
 For now, we are sticking closely to what's documented in the Meteor guide. Take a look at the following for more info and helpful examples:
 
 * [Code style](https://guide.meteor.com/code-style.html)
 * [Application structure](https://guide.meteor.com/structure.html)
 * [Testing](https://guide.meteor.com/testing.html)
 
-### License
+## License
 Grow-IoT is released under the 2-Clause BSD License, sometimes referred to as the "Simplified BSD License" or the "FreeBSD License". 
