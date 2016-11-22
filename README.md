@@ -5,9 +5,10 @@
 Grow-IoT allows you to:
 * Create custom devices / things with webcomponents #usetheplatform
 * Securely connect and store data from sensors and actuators
+* Own your data ([host your own instance!](https://github.com/CommonGarden/Grow-IoT/wiki/Cloud-setup))
 * *Beta*: Create interelationships and workflows between things
 
-If you think the Internet of Things should be based on open standards and interoperable by design (kind of like the web)... well, you've come to the right place. Let's make it easier for scientists of all ages to start collecting data from sensors.
+If you think the Internet of Things should be based on open standards and interoperable by design (kind of like the web)... well, you've come to the right place.
 
 ![Example image](https://cloud.githubusercontent.com/assets/521978/20240422/a50694ee-a8cc-11e6-97f5-81b636149b85.png)
 
@@ -46,7 +47,12 @@ To add a component:
 
 2. Then add it to the `imports/ui/imports.html` file. 
 
-Now it's ready to use in Grow-IoT! For more information on creating custom elements see the [polymer project](https://www.polymer-project.org/1.0/).
+Now it's ready to use in Grow-IoT! For more information on creating custom elements see the [polymer project](https://www.polymer-project.org/1.0/). **We've started building a collection in our [grow-elements repo](https://github.com/CommonGarden/grow-elements).** 
+
+Currently, we have a start of some gauges for ph, temperature, and humidty:
+
+![Current grow-elements ui](https://cloud.githubusercontent.com/assets/521978/20504229/3de347d6-affb-11e6-8002-f7c46a3e981a.png)
+
 
 ## Connecting devices (or virtual things)
 
